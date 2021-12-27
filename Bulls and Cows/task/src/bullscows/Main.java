@@ -15,6 +15,26 @@ class Code {
     public List<Integer> getCode() {
         return this.code;
     }
+
+    public int getFirstDigit() {
+        return code.get(0);
+    }
+
+    public int getSecondDigit() {
+        return code.get(1);
+    }
+
+    public int getThirdDigit() {
+        return code.get(2);
+    }
+
+    public int getFourthDigit() {
+        return code.get(3);
+    }
+
+   /* public int size() {
+        return code.size();
+    } */
 }
 
 class Game{
@@ -48,7 +68,26 @@ class Game{
         return secret;
     }
 
-    public void Grader(Code secret, Code guess) {
+    public void Grader(Game game, Code guess) {
+
+        if (game.getSecret().getFirstDigit() == guess.getFirstDigit()) {
+            game.addBull();
+        }
+
+        if (game.getSecret().getSecondDigit() == guess.getSecondDigit()) {
+            game.addBull();
+        }
+
+        if (game.getSecret().getThirdDigit() == guess.getThirdDigit()) {
+            game.addBull();
+        }
+
+        if (game.getSecret().getFourthDigit() == guess.getFourthDigit()) {
+            game.addBull();
+        }
+
+
+
 
     }
 

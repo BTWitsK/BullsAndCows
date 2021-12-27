@@ -22,6 +22,15 @@ class Code {
     public int size() {
         return code.size();
     }
+
+    public String printString() {
+        char[] tempString = new char[4];
+        for (int i = 0; i < tempString.length; i++) {
+            tempString[i] = Character.forDigit(code.get(i), 10);
+        }
+
+        return new String(tempString);
+    }
 }
 
 class Game extends Code {
@@ -58,11 +67,11 @@ class Game extends Code {
         return secret;
     }*/
 
-    public void Grader(Game game, Code guess) {
+    public static void Grader(Game game, Code guess) {
 
         for (Integer num : guess.getCode()) {
             if (game.getCode().contains(num)) {
-                addCow();
+                game.addCow();
             }
         }
 
@@ -77,14 +86,14 @@ class Game extends Code {
     }
 
     public void printResults() {
-        if (bulls == 0 && cows == 0) {
-            System.out.println("Grade: None. The secret code is 2474");
-        } else if (bulls == 0) {
-            System.out.printf("Grade: %d cow(s). The secret code is 2474 \n", cows);
-        } else if (cows == 0) {
-            System.out.printf("Grade: %d bull(s). The secret code is 2474 \n", bulls);
+        if (this.bulls == 0 && this.cows == 0) {
+            System.out.printf("Grade: None. The secret code is %s\n", printString());
+        } else if (this.bulls == 0) {
+            System.out.printf("Grade: %d cow(s). The secret code is %s\n", cows, printString());
+        } else if (this.cows == 0) {
+            System.out.printf("Grade: %d bull(s). The secret code is %s\n", bulls, printString());
         } else {
-            System.out.printf("Grade: %d bull(s) and %d cow(s). The secret code is 2474 \n", bulls, cows);
+            System.out.printf("Grade: %d bull(s) and %d cow(s). The secret code is %s\n", bulls, cows, printString());
         }
     }
 }
@@ -92,20 +101,12 @@ class Game extends Code {
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        List<Integer> secret = new ArrayList<>();
-        Game.secretCode.
+        Code guess = new Code(scanner.nextLine());
+        Game game = new Game("2474");
 
+        Game.Grader(game, guess);
 
-        ArrayList<Integer> input = new ArrayList<>();
-
-
-
-
-
-
+        game.printResults();
 
     }
-
-
-
 }

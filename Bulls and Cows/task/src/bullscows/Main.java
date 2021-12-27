@@ -3,49 +3,35 @@ package bullscows;
 import java.util.*;
 
 class Code {
-    private final List<Integer> code = new ArrayList<>();
+    protected final List<Integer> code = new ArrayList<>();
 
     public Code(String secretCode) {
         for (String num : secretCode.split("")) {
             this.code.add(Integer.valueOf(num));
         }
-
     }
 
     public List<Integer> getCode() {
         return this.code;
     }
 
-    public int getFirstDigit() {
-        return code.get(0);
+    public int getDigit (int i) {
+        return code.get(i);
     }
 
-    public int getSecondDigit() {
-        return code.get(1);
-    }
-
-    public int getThirdDigit() {
-        return code.get(2);
-    }
-
-    public int getFourthDigit() {
-        return code.get(3);
-    }
-
-   /* public int size() {
+    public int size() {
         return code.size();
-    } */
+    }
 }
 
-class Game{
+class Game extends Code {
     private int bulls;
     private int cows;
-    private final Code secret;
 
-    public Game(Code secretCode) {
+    public Game(String secretCode) {
+        super(secretCode);
         this.bulls = 0;
         this.cows = 0;
-        this.secret = secretCode;
     }
 
     public void addBull() {
@@ -60,34 +46,33 @@ class Game{
         this.cows++;
     }
 
+    public void removeCow() {
+        this.cows--;
+    }
+
     public int getCows() {
         return this.cows;
     }
 
-    public Code getSecret() {
+    /* public Code getSecret() {
         return secret;
-    }
+    }*/
 
     public void Grader(Game game, Code guess) {
 
-        if (game.getSecret().getFirstDigit() == guess.getFirstDigit()) {
-            game.addBull();
+        for (Integer num : guess.getCode()) {
+            if (game.getCode().contains(num)) {
+                addCow();
+            }
         }
 
-        if (game.getSecret().getSecondDigit() == guess.getSecondDigit()) {
-            game.addBull();
+        for (int i = 0; i < game.size(); i++) {
+            if (game.getDigit(i) == guess.getDigit(i)) {
+                game.addBull();
+                game.removeCow();
+            }
+
         }
-
-        if (game.getSecret().getThirdDigit() == guess.getThirdDigit()) {
-            game.addBull();
-        }
-
-        if (game.getSecret().getFourthDigit() == guess.getFourthDigit()) {
-            game.addBull();
-        }
-
-
-
 
     }
 

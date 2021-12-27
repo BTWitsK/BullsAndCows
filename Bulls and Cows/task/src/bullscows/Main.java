@@ -2,18 +2,53 @@ package bullscows;
 
 import java.util.*;
 
+class Code {
+    private final List<Integer> code = new ArrayList<>();
+
+    public Code(String secretCode) {
+        for (String num : secretCode.split("")) {
+            this.code.add(Integer.valueOf(num));
+        }
+
+    }
+
+    public List<Integer> getCode() {
+        return this.code;
+    }
+}
+
 class Game{
-    static int bulls = 0;
-    static int cows = 0;
-    static ArrayList<String> code = new ArrayList<>();
+    private int bulls;
+    private int cows;
+    private final Code secret;
 
+    public Game(Code secretCode) {
+        this.bulls = 0;
+        this.cows = 0;
+        this.secret = secretCode;
+    }
 
-    public void Grader(List guess) {
+    public void addBull() {
+        this.bulls++;
+    }
 
+    public int getBulls() {
+        return this.bulls;
+    }
 
+    public void addCow() {
+        this.cows++;
+    }
 
+    public int getCows() {
+        return this.cows;
+    }
 
+    public Code getSecret() {
+        return secret;
+    }
 
+    public void Grader(Code secret, Code guess) {
 
     }
 
@@ -34,13 +69,11 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         List<Integer> secret = new ArrayList<>();
+        Game.secretCode.
 
 
-        List<Integer> input = new ArrayList<>();
+        ArrayList<Integer> input = new ArrayList<>();
 
-        for (String num : String.valueOf(scanner.nextInt()).split("")) {
-            input.add(Integer.valueOf(num));
-        }
 
 
 

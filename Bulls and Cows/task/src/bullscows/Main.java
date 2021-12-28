@@ -24,12 +24,10 @@ class Code {
     }
 
     public String printString() {
-        char[] tempString = new char[4];
-        for (int i = 0; i < tempString.length; i++) {
-            tempString[i] = Character.forDigit(code.get(i), 10);
-        }
+        StringBuilder answer = new StringBuilder();
+        code.forEach(answer::append);
 
-        return new String(tempString);
+        return answer.toString();
     }
 }
 
@@ -96,17 +94,47 @@ class Game extends Code {
             System.out.printf("Grade: %d bull(s) and %d cow(s). The secret code is %s\n", bulls, cows, printString());
         }
     }
+
+    public static String generateCode(int input) {
+        StringBuilder secretCode = new StringBuilder("");
+
+        while (secretCode.length() < input) {
+            long pseudoRandomNumber = System.nanoTime();
+            List<String> random  = List.of(String.valueOf(pseudoRandomNumber).split(""));
+
+            for (String digit : random) {
+                if (!Arrays.asList(secretCode.toString().split("")).contains(digit)) {
+                    secretCode.append(digit);
+                    break;
+                }
+            }
+
+            if (secretCode.charAt(0) == '0') {
+                secretCode.deleteCharAt(0);
+            }
+        }
+
+        return secretCode.toString();
+    }
 }
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Code guess = new Code(scanner.nextLine());
-        Game game = new Game("2474");
+        //Code guess = new Code(scanner.nextLine());
 
-        Game.Grader(game, guess);
+        int input = scanner.nextInt();
+        if (input > 10) {
+            System.out.println("Error: Can't generate a secret number with a length of 11.");
+        } else {
+            Game game = new Game(Game.generateCode(input));
+            System.out.printf("The random secret number is %s", game.printString());
+        }
 
-        game.printResults();
+
+        //Game.Grader(game, guess);
+
+        //game.printResults();
 
     }
 }

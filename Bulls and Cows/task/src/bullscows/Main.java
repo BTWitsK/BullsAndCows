@@ -15,10 +15,6 @@ class Code {
         return this.code;
     }
 
-    public int getDigit (int i) {
-        return code.get(i);
-    }
-
     public int size() {
         return code.size();
     }
@@ -53,50 +49,42 @@ class Game extends Code {
         this.cows++;
     }
 
-    public void removeCow() {
-        this.cows--;
-    }
-
     public int getCows() {
         return this.cows;
     }
 
-    /* public Code getSecret() {
-        return secret;
-    }*/
-
     public static void Grader(Game game, Code guess) {
 
-        for (Integer num : guess.getCode()) {
-            if (game.getCode().contains(num)) {
-                game.addCow();
+        for (Integer num : game.getCode()) {
+            if (guess.getCode().contains(num)) {
+                if (game.getCode().indexOf(num) == guess.getCode().indexOf(num)) {
+                    game.addBull();
+                } else {
+                    game.addCow();
+                }
             }
         }
-
-        for (int i = 0; i < game.size(); i++) {
-            if (game.getDigit(i) == guess.getDigit(i)) {
-                game.addBull();
-                game.removeCow();
-            }
-
-        }
-
     }
 
     public void printResults() {
         if (this.bulls == 0 && this.cows == 0) {
-            System.out.printf("Grade: None. The secret code is %s\n", printString());
+            System.out.println("Grade: None.");
         } else if (this.bulls == 0) {
-            System.out.printf("Grade: %d cow(s). The secret code is %s\n", cows, printString());
+            System.out.printf("Grade: %d cow(s)\n", getCows());
         } else if (this.cows == 0) {
-            System.out.printf("Grade: %d bull(s). The secret code is %s\n", bulls, printString());
+            System.out.printf("Grade: %d bull(s)\n", getBulls());
+        } else if (this.bulls == size()) {
+            System.out.printf("Grade: %d bull(s)\n", getBulls());
+            System.out.println("Congratulations! You guessed the secret code.");
         } else {
-            System.out.printf("Grade: %d bull(s) and %d cow(s). The secret code is %s\n", bulls, cows, printString());
+            System.out.printf("Grade: %d bull(s) and %d cow(s).\n", getBulls(), getCows());
         }
+        //bulls = 0;
+        //cows = 0;
     }
 
     public static String generateCode(int input) {
-        StringBuilder secretCode = new StringBuilder("");
+        StringBuilder secretCode = new StringBuilder();
 
         while (secretCode.length() < input) {
             long pseudoRandomNumber = System.nanoTime();
@@ -113,7 +101,6 @@ class Game extends Code {
                 secretCode.deleteCharAt(0);
             }
         }
-
         return secretCode.toString();
     }
 }
@@ -121,20 +108,28 @@ class Game extends Code {
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        //Code guess = new Code(scanner.nextLine());
+        System.out.println("Please, enter the secret code's length: ");
 
         int input = scanner.nextInt();
         if (input > 10) {
             System.out.println("Error: Can't generate a secret number with a length of 11.");
-        } else {
-            Game game = new Game(Game.generateCode(input));
-            System.out.printf("The random secret number is %s", game.printString());
+            return;
         }
 
+        System.out.println("Okay, let's start a game!");
+        Game game = new Game(Game.generateCode(input));
+        Code guess;
 
-        //Game.Grader(game, guess);
+        int turn = 1;
+        do {
+            System.out.printf("Turn %d:\n", turn);
+            guess = new Code(String.valueOf(scanner.nextInt()));
+            Game.Grader(game,guess);
+            game.printResults();
+            turn++;
 
-        //game.printResults();
+        } while (game.getBulls() != input);
+
 
     }
 }

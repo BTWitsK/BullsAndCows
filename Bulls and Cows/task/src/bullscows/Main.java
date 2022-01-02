@@ -86,12 +86,13 @@ class Game extends Code {
         }
     }
 
-    public static String generateCode(int input) {
+    public static String generateCode(int codeLength, int symbols) {
+        String possibleSymbols = "0123456789abcdefghijklmnopqrstuvwxyz";
         StringBuilder secretCode = new StringBuilder();
 
-        while (secretCode.length() < input) {
+        while (secretCode.length() < codeLength) {
             Random random = new Random();
-            int digit = random.nextInt(10);
+            int digit = random.nextInt(symbols);
 
             if (!Arrays.asList(secretCode.toString().split("")).contains(String.valueOf(digit))) {
                 secretCode.append(digit);
@@ -101,7 +102,15 @@ class Game extends Code {
                 secretCode.deleteCharAt(0);
             }
         }
-        System.out.println(secretCode);
+        System.out.print("The secret is prepared: ");
+        for (int i = 0; i < codeLength; i++) {
+            System.out.print("*");
+        }
+        if (codeLength > 9) {
+            System.out.printf(" (%s-%s, %s-%s).\n", );
+        } else {
+            System.out.printf(" (%s-%s).\n", );
+        }
 
         return secretCode.toString();
     }
@@ -110,16 +119,19 @@ class Game extends Code {
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please, enter the secret code's length: ");
 
-        int input = scanner.nextInt();
-        if (input > 10) {
-            System.out.println("Error: Can't generate a secret number with a length of 11.");
+        System.out.println("Please, enter the secret code's length: ");
+        int codeLength = scanner.nextInt();
+        if (codeLength> 36) {
+            System.out.println("Error: Can't generate a secret number with a length of 37.");
             return;
         }
 
+        System.out.println("Input the number of possible symbols in the code: ");
+        int symbols = scanner.nextInt();
+        Game game = new Game(Game.generateCode(codeLength, symbols));
+
         System.out.println("Okay, let's start a game!");
-        Game game = new Game(Game.generateCode(input));
         Code guess;
 
         int turn = 1;
@@ -131,7 +143,7 @@ public class Main {
             game.printResults();
             turn++;
 
-        } while (game.getBulls() != input);
+        } while (game.getBulls() != codeLength);
 
 
     }

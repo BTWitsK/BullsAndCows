@@ -54,16 +54,21 @@ class Game extends Code {
     }
 
     public static void Grader(Game game, Code guess) {
-
         for (Integer num : game.getCode()) {
             if (guess.getCode().contains(num)) {
-                if (game.getCode().indexOf(num) == guess.getCode().indexOf(num)) {
+                System.out.println(guess.size());
+                if (Objects.equals(num, guess.getCode().get(game.getCode().indexOf(num)))) {
                     game.addBull();
                 } else {
                     game.addCow();
                 }
             }
         }
+    }
+
+    public void clear() {
+        this.cows = 0;
+        this.bulls = 0;
     }
 
     public void printResults() {
@@ -79,28 +84,25 @@ class Game extends Code {
         } else {
             System.out.printf("Grade: %d bull(s) and %d cow(s).\n", getBulls(), getCows());
         }
-        //bulls = 0;
-        //cows = 0;
     }
 
     public static String generateCode(int input) {
         StringBuilder secretCode = new StringBuilder();
 
         while (secretCode.length() < input) {
-            long pseudoRandomNumber = System.nanoTime();
-            List<String> random  = List.of(String.valueOf(pseudoRandomNumber).split(""));
+            Random random = new Random();
+            int digit = random.nextInt(10);
 
-            for (String digit : random) {
-                if (!Arrays.asList(secretCode.toString().split("")).contains(digit)) {
-                    secretCode.append(digit);
-                    break;
-                }
+            if (!Arrays.asList(secretCode.toString().split("")).contains(String.valueOf(digit))) {
+                secretCode.append(digit);
             }
 
             if (secretCode.charAt(0) == '0') {
                 secretCode.deleteCharAt(0);
             }
         }
+        System.out.println(secretCode);
+
         return secretCode.toString();
     }
 }
@@ -122,6 +124,7 @@ public class Main {
 
         int turn = 1;
         do {
+            game.clear();
             System.out.printf("Turn %d:\n", turn);
             guess = new Code(String.valueOf(scanner.nextInt()));
             Game.Grader(game,guess);

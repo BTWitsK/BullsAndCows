@@ -3,15 +3,13 @@ package bullscows;
 import java.util.*;
 
 class Code {
-    protected final List<Integer> code = new ArrayList<>();
+    protected final List<String> code = new ArrayList<>();
 
     public Code(String secretCode) {
-        for (String num : secretCode.split("")) {
-            this.code.add(Integer.valueOf(num));
-        }
+        this.code.addAll(Arrays.asList(secretCode.split("")));
     }
 
-    public List<Integer> getCode() {
+    public List<String> getCode() {
         return this.code;
     }
 
@@ -54,10 +52,9 @@ class Game extends Code {
     }
 
     public static void Grader(Game game, Code guess) {
-        for (Integer num : game.getCode()) {
-            if (guess.getCode().contains(num)) {
-                System.out.println(guess.size());
-                if (Objects.equals(num, guess.getCode().get(game.getCode().indexOf(num)))) {
+        for (String character: game.getCode()) {
+            if (guess.getCode().contains(character)) {
+                if (Objects.equals(character, guess.getCode().get(game.getCode().indexOf(character)))) {
                     game.addBull();
                 } else {
                     game.addCow();
@@ -94,22 +91,21 @@ class Game extends Code {
             Random random = new Random();
             int digit = random.nextInt(symbols);
 
-            if (!Arrays.asList(secretCode.toString().split("")).contains(String.valueOf(digit))) {
-                secretCode.append(digit);
-            }
-
-            if (secretCode.charAt(0) == '0') {
-                secretCode.deleteCharAt(0);
+            if (!secretCode.toString().contains(String.valueOf(possibleSymbols.charAt(digit)))) {
+                secretCode.append(possibleSymbols.charAt(digit));
             }
         }
+
         System.out.print("The secret is prepared: ");
         for (int i = 0; i < codeLength; i++) {
             System.out.print("*");
         }
-        if (codeLength > 9) {
-            System.out.printf(" (%s-%s, %s-%s).\n", );
+        if (symbols > 10) {
+            System.out.printf(" (0-9, a-%c).\n",possibleSymbols.charAt(symbols - 1) );
+        } else if (symbols == 10){
+            System.out.print(" (0-9, a).\n");
         } else {
-            System.out.printf(" (%s-%s).\n", );
+            System.out.print(" (0-9).\n");
         }
 
         return secretCode.toString();
@@ -138,7 +134,7 @@ public class Main {
         do {
             game.clear();
             System.out.printf("Turn %d:\n", turn);
-            guess = new Code(String.valueOf(scanner.nextInt()));
+            guess = new Code(scanner.nextLine());
             Game.Grader(game,guess);
             game.printResults();
             turn++;

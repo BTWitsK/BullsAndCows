@@ -117,16 +117,33 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Please, enter the secret code's length: ");
-        int codeLength = scanner.nextInt();
-        if (codeLength> 36) {
-            System.out.println("Error: Can't generate a secret number with a length of 37.");
+        int codeLength;
+
+        try {
+            codeLength = scanner.nextInt();
+        } catch (InputMismatchException error) {
+            System.out.print("error:Not a valid number");
+            return;
+        }
+        if (codeLength > 36) {
+            System.out.println("error: Can't generate a secret number with a length of 37.");
             return;
         }
 
         System.out.println("Input the number of possible symbols in the code: ");
         int symbols = scanner.nextInt();
-        Game game = new Game(Game.generateCode(codeLength, symbols));
 
+        if (symbols > 36){
+            System.out.print("error: max number of possible symbols in the code is 36");
+            return;
+        }
+        if (symbols > codeLength) {
+            System.out.printf("Error: error it's not possible to generate a code with a length of %d with %d unique symbols", codeLength, symbols);
+            System.exit(0);
+            return;
+        }
+
+        Game game = new Game(Game.generateCode(codeLength, symbols));
         System.out.println("Okay, let's start a game!");
         Code guess;
 
